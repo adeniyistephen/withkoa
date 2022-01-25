@@ -34,6 +34,7 @@ func (nc NewConvert) ConvertToNaira(cm ConvertMoney) (ConvertMoney, error) {
 	}
 
 	// return the converted amount
+	log.Printf("converted %f %s to %f %s", cm.Amount, cm.Currency, convert, c.Currency)
 	return c, nil
 }
 
@@ -53,6 +54,7 @@ func (nc NewConvert) ConvertToCedis(cm ConvertMoney) (ConvertMoney, error) {
 		Amount: convert,
 	}
 
+	log.Printf("converted %f %s to %f %s", cm.Amount, cm.Currency, convert, c.Currency)
 	// 	return the converted amount
 	return c, nil
 }
@@ -73,6 +75,7 @@ func (nc NewConvert) ConvertToShillings(cm ConvertMoney) (ConvertMoney, error) {
 		Amount: convert,
 	}
 
+	log.Printf("converted %v %s to %v %s", cm.Amount, cm.Currency, convert, c.Currency)
 	// return the converted amount
 	return c, nil
 }
