@@ -11,9 +11,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/adeniyistephen/withkoa/app/api"
 	"github.com/ardanlabs/conf"
 	"github.com/pkg/errors"
-	"github.com/adeniyistephen/withkoa/app/api"
 )
 
 // build is the git version of this program. It is set using build flags in the makefile.
@@ -86,9 +86,11 @@ func run(log *log.Logger) error {
 	shutdown := make(chan os.Signal, 1)
 	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
 
+	var secretKey = []byte("047f247362adc8b60a3bd0a1fbd6ef78f84bf4a032839cd63f9eb8329ba40eaf")
+
 	api := http.Server{
 		Addr:         cfg.Web.APIHost,
-		Handler:      api.Handle(log),
+		Handler:      api.Handle(log, secretKey),
 		ReadTimeout:  cfg.Web.ReadTimeout,
 		WriteTimeout: cfg.Web.WriteTimeout,
 	}

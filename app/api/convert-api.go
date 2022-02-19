@@ -25,8 +25,14 @@ func (cg convertGroup) ConvertNaira(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
+	matches := r.Header.Get("Authorization")
+	if matches == "" {
+		respondWithError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	// Convert to naira
-	cvm, err := cg.convert.ConvertToNaira(cm)
+	cvm, err := cg.convert.ConvertToNaira(cm, matches)
 	if err != nil {
 		log.Panic(errors.Wrap(err, "Could not convert to Naira"))
 	}
@@ -77,6 +83,11 @@ func (cg convertGroup) ConvertShilling(w http.ResponseWriter, r *http.Request) {
 
 	// Return the converted amount
 	respondWithJSON(w, http.StatusCreated, cvm)
+}
+
+func (cg convertGroup) Token(w http.ResponseWriter, r *http.Request) {
+	tkn := cg.convert.Token()
+	respondWithJSON(w, http.StatusOK, map[string]string{"message": "Auth successful", "token": tkn})
 }
 
 // Return an error message as a JSON object
